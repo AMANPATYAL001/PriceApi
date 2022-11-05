@@ -14,14 +14,18 @@ app = FastAPI()
 @app.get("/url/")
 def read_root(q: Union[str, None] = None):
 # def read_root(q:str):
-    start_time=time.time()
-    URL=q
-    headers={"User-Agent" : "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36"}
-    r = requests.get(URL,headers=headers)
+    try:
+        start_time=time.time()
+        URL=q
+        headers={"User-Agent" : "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36"}
+        r = requests.get(URL,headers=headers)
 
-    x = re.search("retailPrice\":\d+\.\d*,", r.text)
-    y = re.search("\d+\.\d*", x.group())
-
+        x = re.search("retailPrice\":\d+\.\d*,", r.text)
+        y = re.search("\d+\.\d*", x.group())
+    
+    except:
+        return {'error':'aman'}
+    
     return {"price": float(y.group()),"timeTaken":time.time()-start_time}
     
 
