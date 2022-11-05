@@ -2,6 +2,7 @@ import requests
 import re
 from typing import Union
 from fastapi import FastAPI
+import time
 # from bs4 import BeautifulSoup
 
 app = FastAPI()
@@ -10,24 +11,31 @@ app = FastAPI()
 
 
 
-@app.get("/")
+@app.get("/url/")
 def read_root(q: Union[str, None] = None):
-    # price=23.091
+# def read_root(q:str):
+    start_time=time.time()
     URL=q
     headers={"User-Agent" : "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36"}
     r = requests.get(URL,headers=headers)
 
     x = re.search("retailPrice\":\d+\.\d*,", r.text)
-    # print(x.group())
-    # print(x)
     y = re.search("\d+\.\d*", x.group())
 
-    return {"price": y.group()}
+    return {"price": float(y.group()),"timeTaken":time.time()-start_time}
+    
 
 
 @app.get("/items/{item_id}")
 def read_item(item_id: int, q: Union[str, None] = None):
     return {"item_id": item_id, "q": q}
+
+@app.get("/it/")
+async def read_items(q: Union[str, None] = None):
+    results = {"items": [{"item_id": "Foo"}, {"item_id": "Bar"}]}
+    if q:
+        results.update({"q": q})
+    return results
 
 #     while  true
 # do
