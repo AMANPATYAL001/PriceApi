@@ -8,7 +8,6 @@ import os
 
 app = FastAPI()
 
-URL = "https://www.lowes.com/pd/Anker-Anker-PowerCore-Essential-20000-Portable-Charger-Power-Bank/1003251768"
 
 import subprocess
 
@@ -35,14 +34,19 @@ def read_root(q: Union[str, None] = None):
 
 @app.get("/items/{item_id}")
 def read_item(item_id: int, q: Union[str, None] = None):
-    return {"item_id": item_id, "q": q}
+    URL = "https://www.lowes.com/pd/Anker-Anker-PowerCore-Essential-20000-Portable-Charger-Power-Bank/1003251768"
+    r = requests.get(URL,headers=headers)
 
-@app.get("/it/")
-async def read_items(q: Union[str, None] = None):
-    results = {"items": [{"item_id": "Foo"}, {"item_id": "Bar"}]}
-    if q:
-        results.update({"q": q})
-    return results
+    x = re.search("retailPrice\":\d+\.\d*,", r.text)
+    y = re.search("\d+\.\d*", x.group())
+    return {"item_id": item_id, "q": q,'y':y.group(),'status':r.status_code}
+
+# @app.get("/it/")
+# async def read_items(q: Union[str, None] = None):
+#     results = {"items": [{"item_id": "Foo"}, {"item_id": "Bar"}]}
+#     if q:
+#         results.update({"q": q})
+#     return results
 
 #     while  true
 # do
