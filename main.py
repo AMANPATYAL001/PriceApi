@@ -3,13 +3,17 @@ import re
 from typing import Union
 from fastapi import FastAPI
 import time
+import os
 # from bs4 import BeautifulSoup
 
 app = FastAPI()
 
-# URL = "https://www.lowes.com/pd/Anker-Anker-PowerCore-Essential-20000-Portable-Charger-Power-Bank/1003251768"
+URL = "https://www.lowes.com/pd/Anker-Anker-PowerCore-Essential-20000-Portable-Charger-Power-Bank/1003251768"
 
+import subprocess
 
+headers={"User-Agent" : "Mozilla/5.0 \(X11; Linux x86_64\) AppleWebKit/537.36 \(KHTML, like Gecko\) Chrome/107.0.0.0 Safari/537.36"}
+# os.system(command)
 
 @app.get("/url/")
 def read_root(q: Union[str, None] = None):
@@ -17,16 +21,15 @@ def read_root(q: Union[str, None] = None):
     try:
         start_time=time.time()
         URL=q
-        headers={"User-Agent" : "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36"}
         r = requests.get(URL,headers=headers)
 
         x = re.search("retailPrice\":\d+\.\d*,", r.text)
         y = re.search("\d+\.\d*", x.group())
     
     except:
-        return {'error':'aman'}
+        return {'error':'aman '+r.status_code}
     
-    return {"price": float(y.group()),"timeTaken":time.time()-start_time}
+    return {"price": float(y.group()),"timeTaken":time.time()-start_time,'status':r.status_code}
     
 
 
