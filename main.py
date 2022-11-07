@@ -35,34 +35,35 @@ def read_root(q: Union[str, None] = None):
     
 #    except:
 #        return {'error':'aman '+r.status_code}
+    try:
+        start_time=time.time()
+        driver = webdriver.Chrome(executable_path=str(os.environ.get('CHROMEDRIVER_PATH')),chrome_options=opts)
+
+        driver.maximize_window()
+        driver.get("https://www.lowes.com/pd/Valspar-2000-Satin-High-Hide-White-Interior-Paint-Actual-Net-Contents-128-fl-oz/1000380217")
+        driver.implicitly_wait(10)
+
+        pinCode=2512
+
+        time.sleep(10)
+        driver.find_elements(By.XPATH,"//*[@data-linkid='selected-store']")[0].click()
+
+        time.sleep(5)
+        a=driver.find_elements(By.XPATH,"//div[@id='storeListContainer']//button")
+        a[1].click()
+
+        time.sleep(2)
+
+        store=driver.find_element(By.ID,'store-search-handler').get_attribute('innerText')
+        print(store)
+        price=driver.find_element(By.CLASS_NAME,'main-price').get_attribute('innerText')
+        print(price)
+        driver.close()
+
+        return {"price": price,"timeTaken":time.time()-start_time,'store':store}
     
-    start_time=time.time()
-    driver = webdriver.Chrome(executable_path=str(os.environ.get('CHROMEDRIVER_PATH')),chrome_options=opts)
-
-    driver.maximize_window()
-    driver.get("https://www.lowes.com/pd/Valspar-2000-Satin-High-Hide-White-Interior-Paint-Actual-Net-Contents-128-fl-oz/1000380217")
-    driver.implicitly_wait(10)
-
-    pinCode=2512
-
-    time.sleep(10)
-    driver.find_elements(By.XPATH,"//*[@data-linkid='selected-store']")[0].click()
-
-    time.sleep(5)
-    a=driver.find_elements(By.XPATH,"//div[@id='storeListContainer']//button")
-    a[1].click()
-
-    time.sleep(2)
-
-    store=driver.find_element(By.ID,'store-search-handler').get_attribute('innerText')
-    print(store)
-    price=driver.find_element(By.CLASS_NAME,'main-price').get_attribute('innerText')
-    print(price)
-    driver.close()
-
-    return {"price": price,"timeTaken":time.time()-start_time,'store':store}
-    
-
+    except Exception as e:
+        return {'eee':str(e)}
 
 @app.get("/items/{item_id}")
 def read_item(item_id: int, q: Union[str, None] = None):
