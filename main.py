@@ -1,4 +1,5 @@
 import requests
+import os
 import re
 from typing import Union
 from fastapi import FastAPI
@@ -16,6 +17,7 @@ opts.add_argument("--headless")
 opts.add_argument("--no-sandbox")
 opts.add_argument("user-agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.100 Safari/537.36")
 opts.add_argument("--disable-blink-features=AutomationControlled")
+opts.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
 opts.add_experimental_option('useAutomationExtension', False)
 
 
