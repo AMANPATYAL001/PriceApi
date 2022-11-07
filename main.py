@@ -46,14 +46,14 @@ def read_root(q: Union[str, None] = None):
 
         pinCode=2512
 
-        time.sleep(15)
+        time.sleep(5)
         driver.find_elements(By.XPATH,"//*[@data-linkid='selected-store']")[0].click()
 
-        time.sleep(15)
+        time.sleep(5)
         a=driver.find_elements(By.XPATH,"//div[@id='storeListContainer']//button")
         a[1].click()
 
-        time.sleep(15)
+        time.sleep(5)
 
         store=driver.find_element(By.ID,'store-search-handler').get_attribute('innerText')
         print(store)
