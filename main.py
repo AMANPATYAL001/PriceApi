@@ -15,8 +15,6 @@ df['uid'] = [uuid.uuid4().__str__() for _ in range(df.shape[0])]
 
 uc = ['Course URL', 'Course Rating', 'Skills', 'University','Difficulty Level']  
 df = df.drop(columns=uc)
-print('\n', df.shape, '\n')
-print(df.head())
 
 df = df.rename(columns={'Course Name': 'course_title',
                'Course Description': 'course_desc'})
@@ -58,4 +56,3 @@ def read_root(q: Union[str, None] = None):
     except Exception as e:
         return {'eee': str(e)}
 
-# print(df[df['course_title'].str.contains(sys.argv[1],case=False)].course_title.to_list())
